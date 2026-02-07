@@ -1,9 +1,39 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import { Login } from "../Pages/Login.jsx";
+import { Register } from "../Pages/register.jsx";
+import { Users } from "../Pages/Users.jsx";
+import Home from "../Pages/Home.jsx";
+import { NotFound } from "../Pages/NotFound.jsx";
+import { Layout } from "../Layouts/Layout.jsx";
+
+
 const router = createBrowserRouter([
-  { path: "/", element: <h1>Home</h1> },
-  { path: "/about", element: <h1>About</h1> },
-  { path: "/contact", element: <h1>Contact</h1> }
-]);
+{
+    element: <Layout/>,
+    children:[
+    {
+    path: "/",
+    element: <Home />},
+    {
+    path: "/login",
+    element: <Login />
+    },
+    {
+        path: "/register",
+        element: <Register />
+    },
+    {
+        path: "/Users",
+        element: <Users />
+        
+    },{
+    path: "*",
+    element: <NotFound />}
+   
+    ]
+}
+])
+    ;
 
 export default router;
