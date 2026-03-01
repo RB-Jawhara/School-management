@@ -1,6 +1,8 @@
+"use client"
+
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { Slot } from "radix-ui"
+import { cva } from "class-variance-authority"
+import { Slot } from "@radix-ui/react-slot" // Import s7i7 dyal Radix Slot
 
 import { cn } from "@/lib/utils"
 
@@ -44,11 +46,9 @@ function Button({
   size = "default",
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot.Root : "button"
+}) {
+  // Comp ghadi ykoun ya "button" ya "Slot" (men Radix) bach asChild t-khdam
+  const Comp = asChild ? Slot : "button"
 
   return (
     <Comp
