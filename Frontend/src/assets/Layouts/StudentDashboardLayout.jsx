@@ -1,37 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import logo from "../logo.jpg";
-import { LOGIN_ROUTE } from "../router/index.jsx";
+import { LOGIN_ROUTE } from "../router/Index.jsx";
 import AxiosClient from "../../api/axios";
+import { UserStateContext } from "../../Context/UserContext.jsx";
 
 export const StudentDashboardLayout = () => {
   const navigate = useNavigate();
+  const context = useContext(UserStateContext);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const checkAuthAndFetchUser = async () => {
-      const token = localStorage.getItem("token");
+    // Redirect to login if not authenticated
+    if (!context.authenticated) {
+      navigate(LOGIN_ROUTE);
+      return;
+    }
 
-      if (!token) {
-        // If no token, redirect to login
-        navigate(LOGIN_ROUTE);
-        return;
-      }
-
-      try {
-        // Fetch user data from Laravel backend
-        const res = await AxiosClient.get("/user");
-        setUser(res.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        // If error (401 etc.), remove token and redirect
-        localStorage.removeItem("token");
-        navigate(LOGIN_ROUTE);
-      }
-    };
-
-    checkAuthAndFetchUser();
-  }, [navigate]);
+    // Fetch user data
+    AxiosClient.get("/user")
+      .then((res) => setUser(res.data))
+      .catch((err) => console.error(err));
+  }, [context, navigate]); // dependencies included
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -51,7 +41,7 @@ export const StudentDashboardLayout = () => {
         <nav className="ml-auto">
           <ul className="flex gap-16 text-xl mr-20">
             <Link to="/" className="hover:text-blue-500 cursor-pointer">
-              Home Page
+              Home
             </Link>
             <button
               onClick={handleLogout}
@@ -60,7 +50,7 @@ export const StudentDashboardLayout = () => {
               Logout
             </button>
             <Link
-              to="/User"
+              to="/user"
               className="ml-5 px-3 py-1 rounded-xl font-semibold bg-gray-400 text-gray-800 cursor-pointer"
             >
               Dark Mode
@@ -72,8 +62,6 @@ export const StudentDashboardLayout = () => {
       <main>
         <Outlet />
       </main>
-
-     
     </>
   );
 };

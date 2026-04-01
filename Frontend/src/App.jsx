@@ -1,18 +1,19 @@
-import { useState } from 'react'
-import { RouterProvider } from 'react-router-dom'
-import './App.css'
-import router from './assets/router/index.jsx'
+import { RouterProvider } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import router from './assets/router/Index';
+import UserContext from './Context/UserContext.jsx';
 
-const App = () => {
+import React from "react";
+
+function App(){
+   
+  return(
+    <UserContext>
+      <RouterProvider router={router} />
+    </UserContext>
+   );
+  
+}
+  export default App;
  
 
-  return (
-    <>
-      <RouterProvider router={router} />
-      
-     
-    </>
-  )
-}
-
-export default App

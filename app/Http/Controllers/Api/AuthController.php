@@ -24,14 +24,14 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // 3. صنع الـ Token (هنا فين كان المشكل)
+        // 3. صنع ال=ـ Token (لمشكل)
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
 
-        // 4. صيفط الـ Response كاملة لـ React
+        
         return response()->json([
             'user' => $user,
-            'token' => $token, // هادي هي اللي كيتسناها React باش يدخلك
+            'token' => $token, 
             'message' => 'Login Success'
         ]);
     }

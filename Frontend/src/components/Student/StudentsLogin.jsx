@@ -1,10 +1,9 @@
 "use client";
 
+import React, { useState, useContext, useEffect } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as React from "react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,9 +16,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { UserStateContext } from "../../Context/UserContext";
+import { STUDENT_DASHBOARD_ROUTE, LOGIN_ROUTE } from "../../assets/router/Index.jsx";
 // Schema dial validation
 const formSchema = z.object({
   email: z.string().email("Invalid Email address."),
@@ -42,41 +41,54 @@ const CustomInput = React.forwardRef(({ className, type, ...props }, ref) => {
 CustomInput.displayName = "CustomInput";
 
 function StudentsLogin() {
+  const { login,setAuthenticated } = useContext(UserStateContext); 
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const[error,setError] = useState({});
   const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "admin@example.com",
+      password: "P@ssw0rd2026!",
     },
   });
 
- async function onSubmit(values) {
+async function onSubmit(values) {
   try {
-    setLoginError("");
+    const response = await login(values.email, values.password);
+    console.log("Login response:", response);
 
-    const response = await axios.post("http://127.0.0.1:8000/api/login", values);
-
-    // 1. Chouf chno jay f l-console
-    console.log("Full Response Object:", response);
-    console.log("Data from Backend:", response.data);
-
-    if (response.data && response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        console.log("Token saved:", response.data.token);
-        navigate("/Student_Dashboard");
-    } else {
-        // Hna fin kigolik makaynch token
-        setLoginError("Token missing! Backend returned: " + JSON.stringify(response.data));
+    // Axios f l-ghalib kiy-sift l-data wast response.data
+    if (response.status === 200) {
+      // 1. Khabi l-token ila kanti katsiftu mn l-back
+      if (response.data.token) {
+        localStorage.setItem('ACCESS_TOKEN', response.data.token);
+      }
+      
+      // 2. Update status w zid l-navigation
+      setAuthenticated(true);
+      navigate(STUDENT_DASHBOARD_ROUTE);
     }
-  } catch (error) {
-    console.error("Error:", error.response?.data);
-  }
-}
+  } 
 
+  catch (err) {
+    if (err.response) {
+      // L-backend jawbek walakin b error (401, 422...)
+      console.log("Status:", err.response.status);
+      console.log("Data:", err.response.data);
+      setError({ email: err.response.data.message });
+    } else if (err.request) {
+      // L-request t-siftat walakin l-backend majawbech (Network Error)
+      console.error("Network Error: Ma-qdernach n-wsslo l-Backend!");
+      setError({ email: "Impossible de contacter le serveur" });
+    } else {
+      // Chi khata' akhor (Setup error)
+      console.error("Error:", err.message);
+    }
+}
+}
   return (
     <Card className="w-full sm:max-w-md mx-auto mt-10">
       <CardContent className="pt-6">
@@ -96,7 +108,7 @@ function StudentsLogin() {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({ field }) => ( 
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
