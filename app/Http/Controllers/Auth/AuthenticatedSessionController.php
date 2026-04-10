@@ -15,7 +15,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
 {
-    // 1. Authenticate l-user (b l-email w password li shhna f LoginRequest)
+    // 1. Authensticate l-user (b l-email w password li shhna f LoginRequest)
     $request->authenticate();
 
     // 2. Generate l-Token l-had l-user

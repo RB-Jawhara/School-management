@@ -4,29 +4,30 @@ import logo from "../logo.jpg";
 import { LOGIN_ROUTE } from "../router/Index.jsx";
 import AxiosClient from "../../api/axios";
 import { UserStateContext } from "../../Context/UserContext.jsx";
+import StudentDropDown from "../../components/Student/StudentDropDown.jsx";
+import StudentApi from "../../Service/Api/Student/StudentApi.js";
+//import { ModeToggle } from "../../components/ModeToggle.jsx";
+
 
 export const StudentDashboardLayout = () => {
+
   const navigate = useNavigate();
   const context = useContext(UserStateContext);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Redirect to login if not authenticated
     if (!context.authenticated) {
       navigate(LOGIN_ROUTE);
       return;
     }
-
-    // Fetch user data
     AxiosClient.get("/user")
       .then((res) => setUser(res.data))
       .catch((err) => console.error(err));
-  }, [context, navigate]); // dependencies included
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate(LOGIN_ROUTE);
-  };
+  }, [context.authenticated, navigate]);
+  
+   
+    
+  
 
   return (
     <>
@@ -39,22 +40,16 @@ export const StudentDashboardLayout = () => {
         </div>
 
         <nav className="ml-auto">
-          <ul className="flex gap-16 text-xl mr-20">
-            <Link to="/" className="hover:text-blue-500 cursor-pointer">
-              Home
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="hover:text-blue-500 cursor-pointer"
-            >
-              Logout
-            </button>
-            <Link
-              to="/user"
-              className="ml-5 px-3 py-1 rounded-xl font-semibold bg-gray-400 text-gray-800 cursor-pointer"
-            >
-              Dark Mode
-            </Link>
+          <ul className="flex gap-16 text-xl mr-20 items-center">
+            <li>
+              <Link to="/" className="hover:text-blue-500 cursor-pointer">
+                Home
+              </Link>
+            </li>
+            <li>
+              <StudentDropDown />
+            </li>
+            
           </ul>
         </nav>
       </div>

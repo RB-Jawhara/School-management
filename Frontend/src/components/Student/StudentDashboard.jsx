@@ -4,7 +4,7 @@ import StudentApi from '../../Service/Api/Student/StudentApi';
 export default function StudentDashboard() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { getUser } = StudentApi();
+  const { getUser } = StudentApi;
 
   useEffect(() => {
     getUser()

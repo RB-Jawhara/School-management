@@ -1,10 +1,7 @@
-import { createContext} from "react";
-import { useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import StudentApi from "../Service/Api/Student/StudentApi";
-import { STUDENT_DASHBOARD_ROUTE } from "../assets/router/Index.jsx";
 
 export const UserStateContext = createContext({
- //wehd store kaytkhbo les info 
   user: null,
   setUser: () => {},
   login: (email, password) => {}, 
@@ -13,25 +10,38 @@ export const UserStateContext = createContext({
   authenticated: false,
 });
 
-
 const UserContext = ({ children }) => {
-  const [user, setUser] = useState({ name: "jawhara" });
-  const studentApi = StudentApi(); // ✅ hna bddlna smiya
-  const [authenticated, setAuthenticated] = useState(false);// ✅ state jdida WA7na 3mlna setAuthenticated bach n9dro nbadlo l value dyalha f login w logout
+  const [user, setUser] = useState(null);
+  const [authenticated, setAuthenticated] = useState(false);
 
-  const login = async (email,password) => {
-    await studentApi.getCsrfToken();//nast3mlo crsf dyl securite 
-    return studentApi.login(email,password)//nasifo login nichan f studentApi w n9dro nst3mlo f ay component b7al StudentsLogin.jsx
+  // 1. Fetch user data mlli kiy-t-loada l-app
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const response = await StudentApi.getUser();
+        setUser(response.data);
+        setAuthenticated(true);
+      } catch (err) {
+        setAuthenticated(false);
+      }
+    };
+    checkUser();
+  }, []);
+
+  // 2. Login function (Fix: StudentApi b S kbira)
+  const login = async (email, password) => {
+    await StudentApi.getCsrfToken(); 
+    return StudentApi.login(email, password); 
   };
 
+  // 3. Logout function (Fix: setAuthenticated smiya shika)
   const logout = () => {
     setUser(null);
-    
+    setAuthenticated(false); // ✅ Match smiya d useState
     localStorage.removeItem("token");
   };
 
   return (
-    //value={{...}}: Ay haja hatitiha hna, y-qder ay component (bhal Login page aw Dashboard) y-jbedha o y-khdem biha.
     <UserStateContext.Provider value={{ user, login, setAuthenticated, logout, authenticated, setUser }}>
       {children}
     </UserStateContext.Provider>
