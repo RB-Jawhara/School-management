@@ -5,58 +5,63 @@ import { LOGIN_ROUTE } from "../router/Index.jsx";
 import AxiosClient from "../../api/axios";
 import { UserStateContext } from "../../Context/UserContext.jsx";
 import StudentDropDown from "../../components/Student/StudentDropDown.jsx";
-import StudentApi from "../../Service/Api/Student/StudentApi.js";
-//import { ModeToggle } from "../../components/ModeToggle.jsx";
-
+import Sidebarcontext from "../../components/SideBar/Sidebarcontext.jsx";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"; 
 
 export const StudentDashboardLayout = () => {
-
   const navigate = useNavigate();
   const context = useContext(UserStateContext);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (!context.authenticated) {
       navigate(LOGIN_ROUTE);
-      return;
     }
-    AxiosClient.get("/user")
-      .then((res) => setUser(res.data))
-      .catch((err) => console.error(err));
   }, [context.authenticated, navigate]);
-  
-   
-    
-  
 
   return (
-    <>
-      <div className="flex items-center bg-gray-800 text-white p-4 shadow-md">
-        <div className="flex items-center">
-          <img src={logo} alt="Logo" className="w-12 h-12" />
-          <span className="text-xl font-semibold ml-4">
-            School Management System
-          </span>
-        </div>
+    <SidebarProvider>
+      {/* 1. Container l-kbir kiy-ched l-screen kamla */}
+      <div className="flex h-screen w-full overflow-hidden bg-gray-50">
+        
+        {/* 2. Sidebar kiy-ji f l-isir */}
+        <Sidebarcontext />
 
-        <nav className="ml-auto">
-          <ul className="flex gap-16 text-xl mr-20 items-center">
-            <li>
-              <Link to="/" className="hover:text-blue-500 cursor-pointer">
+        {/* 3. L-jiha l-yamna (Navbar + Content) */}
+        <div className="flex flex-col flex-1 overflow-hidden">
+          
+          {/* Header/Navbar m-fixiya l-foq */}
+          <header className="flex h-16 items-center border-b bg-white px-6 shadow-sm">
+            {/* Had l-bouton kiy-hll w kiy-sed l-sidebar */}
+            <SidebarTrigger className="mr-4 text-gray-600" />
+            
+            <div className="flex items-center gap-3">
+              <img src={logo} alt="Logo" className="w-8 h-8 rounded-full" />
+              <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hidden sm:block">
+                School Management
+              </span>
+            </div>
+
+            <nav className="ml-auto flex items-center gap-6">
+              <Link 
+                to="/" 
+                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+              >
                 Home
               </Link>
-            </li>
-            <li>
+              <div className="h-6 w-px bg-gray-200" /> {/* Separator */}
               <StudentDropDown />
-            </li>
-            
-          </ul>
-        </nav>
-      </div>
+            </nav>
+          </header>
 
-      <main>
-        <Outlet />
-      </main>
-    </>
+          {/* Page Content - scrollable bohdou */}
+          <main className="flex-1 overflow-y-auto p-8">
+            <div className="mx-auto max-w-6xl">
+              <Outlet />
+            </div>
+          </main>
+          
+        </div>
+      </div>
+    </SidebarProvider>
   );
 };
