@@ -7,6 +7,8 @@ import { UserStateContext } from "../../Context/UserContext.jsx";
 import StudentDropDown from "../../components/Student/StudentDropDown.jsx";
 import Sidebarcontext from "../../components/SideBar/Sidebarcontext.jsx";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"; 
+ 
+import ModeToggle from "../../components/Student/ModeToggle";
 
 export const StudentDashboardLayout = () => {
   const navigate = useNavigate();
@@ -20,19 +22,16 @@ export const StudentDashboardLayout = () => {
 
   return (
     <SidebarProvider>
-      {/* 1. Container l-kbir kiy-ched l-screen kamla */}
-      <div className="flex h-screen w-full overflow-hidden bg-gray-50">
+      {/* 1. Zdna dark:bg-slate-950 bach itbeddel l-background l-kbir */}
+      <div className="flex h-screen w-full overflow-hidden bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
         
-        {/* 2. Sidebar kiy-ji f l-isir */}
         <Sidebarcontext />
 
-        {/* 3. L-jiha l-yamna (Navbar + Content) */}
         <div className="flex flex-col flex-1 overflow-hidden">
           
-          {/* Header/Navbar m-fixiya l-foq */}
-          <header className="flex h-16 items-center border-b bg-white px-6 shadow-sm">
-            {/* Had l-bouton kiy-hll w kiy-sed l-sidebar */}
-            <SidebarTrigger className="mr-4 text-gray-600" />
+          {/* 2. Header: Beddel bg-white b dark:bg-slate-900 w dark:border-slate-800 */}
+          <header className="flex h-16 items-center border-b bg-white dark:bg-slate-900 dark:border-slate-800 px-6 shadow-sm transition-colors">
+            <SidebarTrigger className="mr-4 text-gray-600 dark:text-gray-400" />
             
             <div className="flex items-center gap-3">
               <img src={logo} alt="Logo" className="w-8 h-8 rounded-full" />
@@ -44,17 +43,21 @@ export const StudentDashboardLayout = () => {
             <nav className="ml-auto flex items-center gap-6">
               <Link 
                 to="/" 
-                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+                className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 Home
               </Link>
-              <div className="h-6 w-px bg-gray-200" /> {/* Separator */}
+              <div className="h-6 w-px bg-gray-200 dark:bg-slate-700" /> 
+              
               <StudentDropDown />
+              
+              {/* 3. Had l-div l-i khwa hna makanch khassou ikoun (msstou) */}
+              <ModeToggle />
             </nav>
           </header>
 
-          {/* Page Content - scrollable bohdou */}
-          <main className="flex-1 overflow-y-auto p-8">
+          {/* 4. Main content: text-black dark:text-white darouri bach l-ktiba tban */}
+          <main className="flex-1 overflow-y-auto p-8 text-slate-900 dark:text-slate-100">
             <div className="mx-auto max-w-6xl">
               <Outlet />
             </div>

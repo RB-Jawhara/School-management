@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "prettier-plugin-tailwindcss": "^0.7.2"
+  },
+  "dependencies": {
+    "lucide-react": "^1.8.0",
+    "next-theme": "^0.1.5"
   }
 }
