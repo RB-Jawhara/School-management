@@ -18,10 +18,12 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
 
         // Create specific user
-        User::factory()->create([
-        'name' => 'Riblaoui',
-        'email' => 'admin@example.com', // Beddel l-email hna
-        'password' => Hash::make('P@ssw0rd2026!')
-        ]);
+       User::factory()->create([
+    'name' => 'Riblaoui',
+    'email' => 'admin@example.com',
+    'password' => Hash::make('P@ssw0rd2026!'),
+    'student_parent_id' => 1, // Zid had l-line (awla ay ID 3ndek)
+    'blood_type' => 'O+',     // Zid had l-line hit 7ta hiya daroriya
+]);
     }
 }

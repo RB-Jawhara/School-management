@@ -15,12 +15,12 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
         
       
-            $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
+            $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])->nullable(); // S sghira: enum() machi string()
           
             
             // 1. Foreign Key: Smiya dial l-table khass tkon student_parents (awla guardians)
             // 2. foreignId khassha l-format: student_parent_id
-            $table->foreignId('student_parent_id')->constrained('student_parents')->onDelete('cascade');
+            $table->foreignId('student_parent_id')->constrained('student_parents')->onDelete('cascade')->nullable();
             
             $table->softDeletes(); // S sghira: softDeletes() machi SoftDeletes()
           

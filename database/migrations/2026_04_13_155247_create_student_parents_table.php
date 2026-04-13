@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('phone_number', 20);
             $table->SoftDeletes ();  
             $table->timestamp('email_verified_at')->nullabe();
+            
             $table->rememberToken();
             $table->timestamps();
         });

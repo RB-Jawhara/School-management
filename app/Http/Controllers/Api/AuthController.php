@@ -14,7 +14,7 @@ class AuthController extends Controller
         // 1. Validation ديال البيانات (Lowercase)
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
 
         // 2. التيست ديال Auth
