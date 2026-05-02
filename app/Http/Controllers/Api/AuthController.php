@@ -5,34 +5,87 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Admin;
 use App\Models\User;
+use App\Models\Teacher; 
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    // 1. Admin Login
+    public function adminLogin(Request $request)
     {
-        // 1. Validation ديال البيانات (Lowercase)
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        // 2. التيست ديال Auth
-        if (!Auth::attempt($credentials)) {
+        if (Auth::guard('admin')->attempt($credentials)) {
+            $admin = Auth::guard('admin')->user();
+            $token = $admin->createToken('admin_token')->plainTextToken;
+
             return response()->json([
-                'message' => 'The provided credentials do not match our records.'
-            ], 422);
+                'user' => $admin,
+                'token' => $token,
+                'role' => 'admin'
+            ],200);
         }
 
-        // 3. صنع ال=ـ Token (لمشكل)
-        $user = Auth::user();
-        $token = $user->createToken('main')->plainTextToken;
+        return response()->json(['message' => 'Email aw Password ghalat f table Admin'], 422);
+    }
 
-        
-        return response()->json([
-            'user' => $user,
-            'token' => $token, 
-            'message' => 'Login Success'
+    // 2. Teacher Login (Zidi hadi bach t-khdem lik l-page dial teacher)
+    public function teacherLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
         ]);
+
+        if (Auth::guard('teacher')->attempt($credentials)) {
+            $teacher = Auth::guard('teacher')->user();
+            $token = $teacher->createToken('teacher_token')->plainTextToken;
+
+            return response()->json([
+                'user' => $teacher,
+                'token' => $token,
+                'role' => 'teacher'
+            ],200);
+          
+        }
+
+        return response()->json(['message' => 'Email aw Password ghalat f table Teacher'], 422);
+    }
+
+    // 3. User Login
+    public function userLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if (Auth::guard('web')->attempt($credentials)) {
+            $user = Auth::guard('web')->user();
+            $token = $user->createToken('user_token')->plainTextToken;
+
+            return response()->json([
+                'user' => $user,
+                'token' => $token,
+                'role' => 'user'
+            ],200);
+            
+        }
+
+        return response()->json(['message' => 'Credentials ghalat'], 422);
+    }
+
+    // 4. Logout (Hadi hiya li ghadi t-7iyed lik 500 Error dial logout)
+    public function logout(Request $request)
+    {
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json(['message' => 'Logged out successfully']);
+        }
+        return response()->json(['message' => 'User not found'], 401);
     }
 }

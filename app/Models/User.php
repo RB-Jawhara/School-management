@@ -34,6 +34,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    protected $appends=['role'];
+    public function getRoleAttribute($key){
+        return 'student';
+    }
 
     /**
      * The attributes that should be cast.

@@ -9,24 +9,34 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
-{
+{//hed lpage li mahkma f les utilisateurs
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request):jsonResponse
 {
     // 1. Authensticate l-user (b l-email w password li shhna f LoginRequest)
     $request->authenticate();
+       $guards =array_keys(config('auth.guards'));//hadi hiya page dyl auth.php
+       $user=null;
+       
+    foreach ($guards as $guard) {
+        $a=Auth::guard($guard);
+            if ($a->check()) {
+                $user=$a->user();
+                //7na hatlia les donnes dyl user 
+            break;
+                }
+}
+$token=$user->createToken('api',['admin'])->plainTextToken;//hna kayn token li ghadi n3tiwh l-user bash ykhdem bih f les requetes dyal API
+ 
+  
 
-    // 2. Generate l-Token l-had l-user
-    $user = $request->user();
-    // createToken('main') kat-generi token jdid
-    $token = $user->createToken('main')->plainTextToken;
 
     // 3. Rejje3 l-JSON fih l-user w l-token
     return response()->json([
         'user' => $user,
-        'token' => $token,
+        'token' =>$token = $user->createToken('api',['admin'])->plainTextToken,
         'message' => 'Login Success'
     ]);
 }
@@ -45,3 +55,4 @@ class AuthenticatedSessionController extends Controller
         return response()->noContent();
     }
 }
+

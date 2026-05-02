@@ -36,9 +36,19 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+        $guards =array_keys((config
+        'auth.guards'));//hadi hiya page dyl auth.php 
+        $isLogged = false;
+        foreach($guards as $guard){
+             if (Auth::guard('guard')->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+                $isLogged=true;
+                break;
+                }
+
+        }
 
         // Khdemna b lowercase 'email' w 'password' bach t-matchi React
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (!$isLogged) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

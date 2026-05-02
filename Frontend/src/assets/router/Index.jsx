@@ -9,31 +9,65 @@ import { NotFound } from "../Pages/NotFound.jsx";
 import { Layout } from "../Layouts/Layout.jsx";
 import { GuestLayout } from "../Layouts/GuestLayout.jsx";
 import { StudentDashboardLayout } from "../Layouts/StudentDashboardLayout.jsx";
-import StudentDashboard from "../../components/Student/StudentDashboard.jsx";
+import StudentDashboard from "../../components/Student/StudentDashboard";
+import AdminDashboardLayout from "../Layouts/AdminDashboardLayout.jsx";
+import AdminDasboard from "../../components/Admin/AdminDasboard.jsx";
+import TeacherDashboardLayout from "../Layouts/TeacherDashboardLayout.jsx";
+import TeacherDashboard from "../../components/Teacher/TeacherDashboard.jsx";
 
-export const STUDENT_DASHBOARD_ROUTE = "/Student_Dashboard";
+export const STUDENT_DASHBOARD_ROUTE = "/student/dashboard";
+export const ADMIN_DASHBOARD_ROUTE = "/admin/dashboard";
+export const TEACHER_DASHBOARD_ROUTE = "/teacher/dashboard";
 export const LOGIN_ROUTE = "/login";
 
 const router = createBrowserRouter([
+
+  // ✅ Guest routes — login/register
+  {
+    element: <GuestLayout />,
+    children: [
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> },
+    ],
+  },
+
+  // ✅ Student routes
+  {
+    path: "/student",                          // ⬅️ prefix مهم
+    element: <StudentDashboardLayout />,
+    children: [
+      { path: "dashboard", element: <StudentDashboard /> },
+    ],
+  },
+
+  // ✅ Admin routes
+  {
+    path: "/admin",
+    element: <AdminDashboardLayout />,
+    children: [
+      { path: "dashboard", element: <AdminDasboard /> },
+    ],
+  },
+
+  // ✅ Teacher routes
+  {
+    path: "/teacher",
+    element: <TeacherDashboardLayout />,
+    children: [
+      { path: "dashboard", element: <TeacherDashboard /> },
+    ],
+  },
+
+  // ✅ Public routes
   {
     element: <Layout />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/register", element: <Register /> },
       { path: "/users", element: <Users /> },
       { path: "*", element: <NotFound /> },
     ],
   },
-  {
-    element: <GuestLayout />,
-    children: [{ path: LOGIN_ROUTE, element: <Login /> }],
-  },
-  {
-    element: <StudentDashboardLayout />,
-    children: [
-      { path: STUDENT_DASHBOARD_ROUTE, element: <StudentDashboard /> },
-    ],
-  },
+
 ]);
 
 export default router;

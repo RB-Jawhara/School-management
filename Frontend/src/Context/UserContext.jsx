@@ -1,51 +1,70 @@
-import { createContext, useState, useEffect } from "react";
-import StudentApi from "../Service/Api/Student/StudentApi";
+import { createContext, useContext, useState, useEffect } from "react";
 
 export const UserStateContext = createContext({
-  user: null,
-  setUser: () => {},
-  login: (email, password) => {}, 
-  setAuthenticated: () => {},
-  logout: () => {},
+  user: {},
   authenticated: false,
+  loading: true,
+  role: null,
+  setUser: () => {},
+  logout: () => {},
+  setAuthenticated: () => {},
+  setToken: () => {},
+  setRole: () => {},
 });
 
-const UserContext = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [authenticated, setAuthenticated] = useState(false);
+export default function UserContext({ children }) {
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [authenticated, _setAuthenticated] = useState(false);
+  const [role, _setRole] = useState(null);
 
-  // 1. Fetch user data mlli kiy-t-loada l-app
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const response = await StudentApi.getUser();
-        setUser(response.data);
-        setAuthenticated(true);
-      } catch (err) {
-        setAuthenticated(false);
-      }
-    };
-    checkUser();
+    const isAuth = window.localStorage.getItem('AUTHENTICATED') === 'true';
+    const savedRole = window.localStorage.getItem('USER_ROLE') ?? null; // ✅ إلا ما كانش يرجع null مشي string "null"
+
+    _setAuthenticated(isAuth);
+    _setRole(savedRole);
+    setLoading(false);
   }, []);
 
-  // 2. Login function (Fix: StudentApi b S kbira)
-  const login = async (email, password) => {
-    await StudentApi.getCsrfToken(); 
-    return StudentApi.login(email, password); 
+  const logout = () => {
+    setUser({});
+    _setAuthenticated(false);
+    _setRole(null);
+    window.localStorage.removeItem('ACCESS_TOKEN');
+    window.localStorage.removeItem('USER_ROLE');
+    window.localStorage.removeItem('AUTHENTICATED'); // ✅ removeItem بدل setItem('false') — أنظف
   };
 
-  // 3. Logout function (Fix: setAuthenticated smiya shika)
-  const logout = () => {
-    setUser(null);
-    setAuthenticated(false); // ✅ Match smiya d useState
-    localStorage.removeItem("token");
+  const setAuthenticated = (isAuthenticated) => {
+    _setAuthenticated(isAuthenticated);
+    window.localStorage.setItem('AUTHENTICATED', isAuthenticated);
+  };
+
+  const setToken = (token) => {
+    window.localStorage.setItem('ACCESS_TOKEN', token);
+  };
+
+  const setRole = (newRole) => {
+    _setRole(newRole);
+    window.localStorage.setItem('USER_ROLE', newRole);
   };
 
   return (
-    <UserStateContext.Provider value={{ user, login, setAuthenticated, logout, authenticated, setUser }}>
+    <UserStateContext.Provider value={{
+      user,
+      logout,
+      setUser,
+      authenticated,
+      setAuthenticated,
+      setToken,
+      loading,
+      role,
+      setRole,
+    }}>
       {children}
     </UserStateContext.Provider>
   );
-};
+}
 
-export default UserContext;
+export const useUserContext = () => useContext(UserStateContext);

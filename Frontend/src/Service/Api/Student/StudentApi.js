@@ -1,5 +1,6 @@
 import AxiosClient from "../../../api/axios";
 
+
 // Hayed "function" w redha "const" object
 const StudentApi = {
   getCsrfToken: async () => {
@@ -7,14 +8,32 @@ const StudentApi = {
       baseURL: 'http://127.0.0.1:8000'
     });
   },
-  login: async (email, password) => {
-    return await AxiosClient.post('/login', { email, password });
+  adminLogin: async (email, password) => {
+   
+    return await AxiosClient.post('/admin/login', { email, password });},
+    // return await AxiosClient.post('/user/login', { email, password });
+  teacherLogin: async (email, password) => {
+    return await AxiosClient.post('/teacher/login', { email, password });
   },
+    studentLogin: async (email, password) => {
+    return await AxiosClient.post('/user/login', { email, password });
+  },
+  
+
+    
+  
   logout: async () => {
-    return await AxiosClient.post('/logout');
+   
+    return await AxiosClient.post('/logout') 
+      
+    
+    
   },
   getUser: async () => {
+
     return await AxiosClient.get("/user");
+    
+
   }
 };
 

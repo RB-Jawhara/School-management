@@ -16,14 +16,14 @@ return new class extends Migration
             $table->string('firstname', 55);
             $table->string('lastname', 55);
             $table->dateTime('date_of_birth');
-            $table->dateTime('last_login_date');
+            $table->dateTime('last_login_date')->nullable();
             $table->enum('gender', ['male', 'female']);
             $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
             $table->string('address', 255);
             $table->string('email', 255)->unique();
             $table->string('phone_number', 20);
             $table->SoftDeletes ();  
-            $table->timestamp('email_verified_at')->nullabe();
+            $table->timestamp('email_verified_at')->nullable();
             
             $table->rememberToken();
             $table->timestamps();
