@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
+
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\StudentParentController;
 
@@ -28,26 +29,24 @@ use App\Http\Controllers\StudentParentController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::middleware('auth:sanctum')->get('/admin', function (Request $request) {
-    return $request->user();
-});
-Route::middleware('auth:sanctum')->get('/teacher', function (Request $request) {
-    return $request->user();
-});
 
-
-
- Route::apiResource('parents', StudentParentController::class);
-
-
-
-
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-
-//e::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
+// ✅ Public — بلا حماية
 Route::post('/user/login', [AuthController::class, 'userLogin']);
 Route::post('/admin/login', [AuthController::class, 'adminLogin']);
 Route::post('/teacher/login', [AuthController::class, 'teacherLogin']);
+
+// ✅ Protected
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+Route::middleware(['auth:sanctum,admin', 'check.admin'])->group(function () {
+    Route::get('/admin', fn(Request $r) => $r->user());
+    Route::apiResource('parents', StudentParentController::class);
+});
+
+Route::middleware(['auth:sanctum,teacher', 'check.teacher'])->group(function () {
+    Route::get('/teacher', fn(Request $r) => $r->user());
+});
+
+Route::middleware(['auth:sanctum,web', 'check.user'])->group(function () {
+    Route::get('/user', fn(Request $r) => $r->user());
+});

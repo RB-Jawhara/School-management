@@ -18,15 +18,24 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    getUser()
-      .then(({ data }) => {
-        setStudent(data);
+   const fetchData = async () => {
+      try {
+        let response;
+        if (useRole === "admin") {
+          response = await StudentApi.getAdmin();
+        } else if (useRole === "teacher") {
+          response = await StudentApi.getTeacher();
+        } else {
+          response = await StudentApi.getUser();
+        }
+        setStudent(response.data);
+      } catch (err) {
+        console.error("Erreur:", err);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erreur mlli bghina njibu student:", err);
-        setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, []);
 
   if (loading) return <div className="p-10">Chargement...</div>;

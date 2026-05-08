@@ -21,7 +21,7 @@ class AuthController extends Controller
 
         if (Auth::guard('admin')->attempt($credentials)) {
             $admin = Auth::guard('admin')->user();
-            $token = $admin->createToken('admin_token')->plainTextToken;
+            $token = $admin->createToken('admin_token',['admin'])->plainTextToken;
 
             return response()->json([
                 'user' => $admin,
@@ -43,7 +43,7 @@ class AuthController extends Controller
 
         if (Auth::guard('teacher')->attempt($credentials)) {
             $teacher = Auth::guard('teacher')->user();
-            $token = $teacher->createToken('teacher_token')->plainTextToken;
+            $token = $teacher->createToken('teacher_token',['teacher'])->plainTextToken;
 
             return response()->json([
                 'user' => $teacher,
@@ -66,7 +66,7 @@ class AuthController extends Controller
 
         if (Auth::guard('web')->attempt($credentials)) {
             $user = Auth::guard('web')->user();
-            $token = $user->createToken('user_token')->plainTextToken;
+            $token = $user->createToken('user_token',['user'])->plainTextToken;
 
             return response()->json([
                 'user' => $user,

@@ -18,8 +18,17 @@ const StudentApi = {
     studentLogin: async (email, password) => {
     return await AxiosClient.post('/user/login', { email, password });
   },
-  
 
+  
+ getAdmin: async () => {
+        return await AxiosClient.get('/admin');
+    },
+    getTeacher: async () => {
+        return await AxiosClient.get('/teacher');
+    },
+    getUser: async () => {
+        return await AxiosClient.get('/user');
+    },
     
   
   logout: async () => {
