@@ -5,7 +5,7 @@ import { LOGIN_ROUTE } from "../router/Index.jsx";
 import { UserStateContext } from "../../Context/UserContext.jsx";
 import StudentDropDown from "../../components/Student/StudentDropDown.jsx";
 import Sidebarcontext from "../../components/SideBar/Sidebarcontext.jsx";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.jsx";
 import ModeToggle from "../../components/Student/ModeToggle";
 
 export const StudentDashboardLayout = () => {

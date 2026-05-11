@@ -6,7 +6,7 @@ import AxiosClient from "../../api/axios";
 import { UserStateContext } from "../../Context/UserContext.jsx";
 import StudentDropDown from "../../components/Student/StudentDropDown.jsx";
 import SuperAdminSidebar from "../../components/SideBar/SuperAdminSidebar.jsx";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"; 
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.jsx"; 
  
 import ModeToggle from "../../components/Student/ModeToggle";
 

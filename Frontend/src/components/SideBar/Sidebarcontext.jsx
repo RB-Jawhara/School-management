@@ -9,8 +9,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { LayoutDashboard, User, Settings, Home } from "lucide-react" // Icons zwinin
+
+} from "@/components/ui/sidebar.jsx"
+import { LayoutDashboard, User, Settings, Home,Plus } from "lucide-react" // Icons zwinin
 import { Link } from "react-router-dom"
 
 function Sidebarcontext() {
@@ -43,7 +44,11 @@ function Sidebarcontext() {
                     <User className="w-5 h-5" />
                     <span>Profile</span>
                   </Link>
+          
                 </SidebarMenuButton>
+                  <button className="px-5  bg-blue-900 text-white rounded-full hover:bg-blue-500 transition-colors"> Create Praent
+    <Plus className="w-5 h-5" />
+  </button>
               </SidebarMenuItem>
 
             </SidebarMenu>

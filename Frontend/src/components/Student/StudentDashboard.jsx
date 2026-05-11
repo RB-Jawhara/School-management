@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import StudentApi from '../../Service/Api/Student/StudentApi';
-import { useUserContext } from '../../Context/UserContext'; // ✅ role من context
+import { useUserContext } from '../../Context/UserContext'; 
 
 export default function StudentDashboard() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // ✅ error state
+  const [error, setError] = useState(null); 
   
-  const { role } = useUserContext(); // ✅ بدل localStorage مباشرة
+  const { role } = useUserContext(); 
   const { getUser } = StudentApi;
 
   useEffect(() => {
@@ -20,11 +20,9 @@ export default function StudentDashboard() {
         setError("فشل تحميل البيانات. حاول مرة أخرى.");
       })
       .finally(() => {
-        setLoading(false); // ✅ finally باش دايما تتعيّط سواء نجح أو فشل
-      });
+        setLoading(false);  
+           });
   }, []);
-
-  // ✅ Early returns منظمة
   if (loading) {
     return (
       <div className="flex items-center justify-center p-10">
@@ -54,14 +52,24 @@ export default function StudentDashboard() {
     return (
       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${current.style}`}>
         {current.label}
-      </span>
+        </span>
     );
-  };
+  
+
+    
+     
+      
+  
+
+  }
 
   return (
+
     <div className="p-10 bg-background text-foreground transition-colors space-y-6">
+    
       
       {/* Header */}
+     
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-foreground">
           مرحباً، {student.name} 👋
@@ -70,7 +78,7 @@ export default function StudentDashboard() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto shadow-md sm:rounded-lg border border-border">
+      <div className="overflow-x-auto rounded-lg border border-border">
         <table className="w-full text-sm text-left text-muted-foreground">
           <thead className="text-xs uppercase bg-muted text-muted-foreground">
             <tr>

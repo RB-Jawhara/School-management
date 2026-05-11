@@ -23,7 +23,6 @@ export default function AdminDasboard() {
       }
 
       };
-
     fetchData();
   }, []);
 
@@ -65,7 +64,7 @@ export default function AdminDasboard() {
   </div>
  
   
-  <p className="mt-6 text-foreground font-medium"> {renderdashbord()}</p>
+  <div className="mt-6 text-foreground font-medium"> {renderdashbord()}</div>
 </div>
   );
 }

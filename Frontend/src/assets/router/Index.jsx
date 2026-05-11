@@ -14,15 +14,18 @@ import AdminDashboardLayout from "../Layouts/AdminDashboardLayout.jsx";
 import AdminDasboard from "../../components/Admin/AdminDasboard.jsx";
 import TeacherDashboardLayout from "../Layouts/TeacherDashboardLayout.jsx";
 import TeacherDashboard from "../../components/Teacher/TeacherDashboard.jsx";
+import ManageParents from "../../components/Admin/ManageParents.jsx";
 
+export const ADMIN_BASE_ROUTE = "/admin";
 export const STUDENT_DASHBOARD_ROUTE = "/student/dashboard";
-export const ADMIN_DASHBOARD_ROUTE = "/admin/dashboard";
+export const ADMIN_DASHBOARD_ROUTE = `${ADMIN_BASE_ROUTE}/dashboard`;
+export const ADMIN_MANAGE_USERS_ROUTE = `${ADMIN_BASE_ROUTE}/manage-parents`;
 export const TEACHER_DASHBOARD_ROUTE = "/teacher/dashboard";
 export const LOGIN_ROUTE = "/login";
 
 const router = createBrowserRouter([
 
-  // ✅ Guest routes — login/register
+  // ✅ Guest routes
   {
     element: <GuestLayout />,
     children: [
@@ -33,19 +36,20 @@ const router = createBrowserRouter([
 
   // ✅ Student routes
   {
-    path: "/student",                          // ⬅️ prefix مهم
+    path: "/student",
     element: <StudentDashboardLayout />,
     children: [
       { path: "dashboard", element: <StudentDashboard /> },
     ],
   },
 
-  // ✅ Admin routes
+  // ✅ Admin routes — ✅ children واحدة فقط
   {
     path: "/admin",
     element: <AdminDashboardLayout />,
     children: [
       { path: "dashboard", element: <AdminDasboard /> },
+      { path: "manage-parents", element: <ManageParents /> }, // Route jdida bach n-managiw l-parents
     ],
   },
 

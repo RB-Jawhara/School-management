@@ -2,7 +2,7 @@ import {
   Sidebar, SidebarContent, SidebarFooter,
   SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar.jsx";
 import { LayoutDashboard, User } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useContext } from "react"

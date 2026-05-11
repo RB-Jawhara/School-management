@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import router from './assets/router/Index';
 import UserContext from './Context/UserContext.jsx';
 import { ThemeProvider } from "./components/Themeprovider"; 
+import { Toaster } from "sonner";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         
         {/* 3. RouterProvider hwa li kiy-dir l-afichage dial l-pages */}
         <RouterProvider router={router} />
+         <Toaster />
         
       </UserContext>
 
